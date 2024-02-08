@@ -74,7 +74,6 @@
 
                                 </table>
                             </div>
-                            {{ $jobs->links() }}
                         </div>
                     </div>
                 </div>

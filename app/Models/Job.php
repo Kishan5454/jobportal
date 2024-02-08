@@ -12,10 +12,10 @@ class Job extends Model
 
     public function JobType()
     {
-        return $this->belongsTo(JobType::class, 'jobtype_id','jobtyep_id');
+        return $this->belongsTo(JobType::class);
     }
 
     public function category(){  
-        return $this->belongsTo(Category::class, 'catagory_id');
+        return $this->belongsTo(Category::class);
     }
 }

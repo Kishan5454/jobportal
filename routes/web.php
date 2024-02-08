@@ -51,6 +51,5 @@ Route::group(['account'], function () {
         Route::get('account/my_job', [AccountController::class, 'my_job'])->name('account.my_job');
         //Edit Job page
         Route::get('account/editjob/{id}', [AccountController::class, 'editjob'])->name('account.editjob');
-
     });
 });

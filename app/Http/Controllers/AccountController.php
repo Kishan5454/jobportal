@@ -237,7 +237,7 @@ class AccountController extends Controller
             ->join('jobtype', 'job.jobtype_id', '=', 'jobtype.jobtype_id')
             ->where('job.user_id', Auth::user()->id)
             ->select(['job.*', 'jobtype.jobtype_name'])
-            ->paginate(10);
+            ->get();
 
         return view('front.account.job.my_jobs', [
             'jobs' => $jobs,
@@ -245,17 +245,25 @@ class AccountController extends Controller
     }
 
     //Edit Jobs
-    public function editjob($id)
+    public function editjob(Request $request, $id)
     {
-        $catagories = Category::orderBy('cat_name', 'ASC')
+        $categories = Category::orderBy('cat_name', 'ASC')
             ->where('status', 1)
             ->get();
+
         $jobtypes = JobType::orderBy('jobtype_name', 'ASC')
             ->where('status', 1)
             ->get();
-            return view('front.account.job.editjobu', [
-                'catagories' => $catagories,
-                'jobtypes' => $jobtypes,
-            ]);
+
+        $jobs = Job::where([
+            'id' => $id,
+            'user_id' =>Auth::user()->id        
+        ])->first();
+
+        return view('front.account.job.editjob', [
+            'categories' => $categories,
+            'jobtypes' => $jobtypes,
+            'job' => $jobs,
+        ]);
     }
 }

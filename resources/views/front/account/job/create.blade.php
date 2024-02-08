@@ -22,7 +22,7 @@
                     <form action="" method="POST" id="createJobPost" name="createJobPost">
                         <div class="card border-0 shadow mb-4 ">
                             <div class="card-body card-form p-4">
-                                <h3 class="fs-4 mb-1">Job Details</h3>
+                                <h3 class="fs-4 mb-1">Job Detail</h3>
                                 <div class="row">
                                     <div class="col-md-6 mb-4">
                                         <label for="" class="mb-2">Title<span class="req">*</span></label>
@@ -129,7 +129,7 @@
                                         class="form-control">
                                 </div>
 
-                                <h3 class="fs-4 mb-1 mt-5 border-top pt-5">Company Details</h3>
+                                <h3 class="fs-4 mb-1 mt-2 border-top pt-2">Company Details</h3>
 
                                 <div class="row">
                                     <div class="mb-4 col-md-6">
