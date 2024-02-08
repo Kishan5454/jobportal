@@ -27,9 +27,11 @@ return new class extends Migration
             $table->text('qualification')->nullable();
             $table->text('keyword')->nullable();
             $table->string('experience');
-            $table->string('comapny_name');
-            $table->string('comapny_location')->nullable();
-            $table->string('comapny_website')->nullable();
+            $table->string('company_name');
+            $table->string('company_location')->nullable();
+            $table->string('company_website')->nullable();
+            $table->integer('status')->default(1);
+            $table->integer('isFeatured')->default(0);
             $table->timestamps();
         });
     }

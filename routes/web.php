@@ -17,8 +17,6 @@ use Illuminate\Support\Facades\Route;
 //Home Pge
 Route::get('/', [HomeController::class, 'index'])->name('index');
 
-
-
 // Logout
 // Route::get('/account/logout', [AccountController::class, 'logout'])->name('account.logout');
 
@@ -27,7 +25,7 @@ Route::get('/', [HomeController::class, 'index'])->name('index');
 
 Route::group(['account'], function () {
     route::group(['middleware' => 'guest'], function () {
-        // Account - registraion 
+        // Account - registraion
         Route::get('/account/register', [AccountController::class, 'registration'])->name('account.registration');
         Route::post('/account/registrationProcess', [AccountController::class, 'registrationProcess'])->name('account.registrationProcess');
         // Account - Login
@@ -45,5 +43,14 @@ Route::group(['account'], function () {
         Route::POST('account/updateUser', [AccountController::class, 'updateUser'])->name('account.updateUser');
         //update Profile pic
         Route::POST('account/updateprofilepic', [AccountController::class, 'updateprofilepic'])->name('account.updateprofilepic');
+        //Show JobPost form
+        Route::get('account/createjob', [AccountController::class, 'createjob'])->name('account.createjob');
+        // Save Jobs in database
+        Route::POST('account/savejob', [AccountController::class, 'savejob'])->name('account.savejob');
+        //Show My Jobs
+        Route::get('account/my_job', [AccountController::class, 'my_job'])->name('account.my_job');
+        //Edit Job page
+        Route::get('account/editjob/{id}', [AccountController::class, 'editjob'])->name('account.editjob');
+
     });
 });
