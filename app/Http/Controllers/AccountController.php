@@ -69,17 +69,13 @@ class AccountController extends Controller
                 return redirect()->route('account.profile');
             } else {
                 // Authentication failed, add error message
-                return redirect()
-                    ->route('account.login')
-                    ->with('error', 'Invalid Details !!');
+                return redirect()->route('account.login')->with('error', 'Invalid Details !!');
             }
         } else {
-            return redirect()
-                ->route('account.login')
-                ->withErrors($validater)
-                ->withInput();
+            return redirect()->route('account.login')->withErrors($validater)->withInput();
         }
     }
+
     //----------------------------------------->Logout User
     public function logout()
     {
@@ -167,38 +163,46 @@ class AccountController extends Controller
         }
     }
 
-    //Show Job Post
+    //--------------------------->Show Job Post
     public function createjob()
     {
-        $catagories = Category::orderBy('cat_name', 'ASC')
-            ->where('status', 1)
-            ->get();
-        $jobtypes = JobType::orderBy('jobtype_name', 'ASC')
-            ->where('status', 1)
-            ->get();
+        $catagories = Category::orderBy('cat_name', 'ASC')->where('status', 1)->get();
+        $jobtypes = JobType::orderBy('jobtype_name', 'ASC')->where('status', 1)->get();
         return view('front.account.job.create', [
             'catagories' => $catagories,
             'jobtypes' => $jobtypes,
         ]);
     }
 
-    // Create job store in database
+    //-------------------------------> Create job store in database
     public function savejob(Request $request)
     {
-        $validater = Validator::make($request->all(), [
-            'title' => 'required',
-            'category' => 'required',
-            'jobtype' => 'required',
-            'vacancy' => 'required',
-            'location' => 'required',
-            'description' => 'required',
-            'company_name' => 'required',
-        ]);
-
-        if ($validater->fails()) {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'title' => 'required',
+                'category' => 'required',
+                'jobtype' => 'required',
+                'vacancy' => 'required',
+                'location' => 'required',
+                'description' => 'required',
+                'company_name' => 'required',
+            ],
+            [
+                'title.required' => 'The Title field is required.',
+                'category.required' => 'The Category field is required.',
+                'jobtype.required' => 'The JobType field is required.',
+                'vacancy.required' => 'The Vacancy field is required.',
+                'location.required' => 'The Location field is required.',
+                'description.required' => 'The Description field is required.',
+                'company_name.required' => 'The Company Name field is required.',
+            ],
+        );
+        // Check if validation fails
+        if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'error' => $validater->errors(),
+                'error' => $validator->errors(),
             ]);
         }
 
@@ -247,23 +251,104 @@ class AccountController extends Controller
     //Edit Jobs
     public function editjob(Request $request, $id)
     {
-        $categories = Category::orderBy('cat_name', 'ASC')
-            ->where('status', 1)
-            ->get();
+        $categories = Category::orderBy('cat_name', 'ASC')->where('status', 1)->get();
 
-        $jobtypes = JobType::orderBy('jobtype_name', 'ASC')
-            ->where('status', 1)
-            ->get();
+        $jobtypes = JobType::orderBy('jobtype_name', 'ASC')->where('status', 1)->get();
 
         $jobs = Job::where([
             'id' => $id,
-            'user_id' =>Auth::user()->id        
+            'user_id' => Auth::user()->id,
         ])->first();
+
+        if ($jobs == null) {
+            abort(404);
+        }
 
         return view('front.account.job.editjob', [
             'categories' => $categories,
             'jobtypes' => $jobtypes,
             'job' => $jobs,
         ]);
+    }
+
+    //----------------------->Update Job form
+    public function UpdateJobPost(Request $request, $id)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'title' => 'required',
+                'category' => 'required',
+                'jobtype' => 'required',
+                'vacancy' => 'required',
+                'location' => 'required',
+                'description' => 'required',
+                'company_name' => 'required',
+            ],
+            [
+                'title.required' => 'The Title field is required.',
+                'category.required' => 'The Category field is required.',
+                'jobtype.required' => 'The JobType field is required.',
+                'vacancy.required' => 'The Vacancy field is required.',
+                'location.required' => 'The Location field is required.',
+                'description.required' => 'The Description field is required.',
+                'company_name.required' => 'The Company Name field is required.',
+            ],
+        );
+        // Check if validation fails
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'error' => $validator->errors(),
+            ]);
+        }
+
+        $job = Job::find($id);
+        $job->title = $request->title;
+        $job->catagory_id = $request->category;
+        $job->jobtype_id = $request->jobtype;
+        $job->user_id = Auth::user()->id;
+        $job->vacancy = $request->vacancy;
+        $job->salary = $request->salary;
+        $job->location = $request->location;
+        $job->description = $request->description;
+        $job->benifits = $request->benefits;
+        $job->responsibility = $request->responsibility;
+        $job->qualification = $request->qualification;
+        $job->keyword = $request->keyword;
+        $job->experience = $request->experience;
+        $job->company_name = $request->company_name;
+        $job->company_location = $request->company_location;
+        $job->company_website = $request->company_website;
+        $job->save();
+
+        session()->flash('success', 'Job Updated Successfully !');
+
+        return response()->json([
+            'status' => true,
+            'error' => [],
+        ]);
+    }
+
+    //Delete Job
+    public function deletejob(Request $request)
+    {
+        try {
+            $job = Job::findOrFail($request->jobid); 
+            $job->delete();
+
+            session()->flash('success', 'Job Deleted Successfully !');
+
+            return response()->json([
+                'status' => true,
+                'error' => [],
+            ]);
+        } catch (\Exception $e) {
+            // Handle the exception, you can log it or return an error response
+            return response()->json([
+                'status' => false,
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
 }

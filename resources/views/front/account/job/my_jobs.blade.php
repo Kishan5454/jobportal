@@ -28,7 +28,6 @@
                                 <div style="margin-top: -10px;">
                                     <a href="{{ route('account.createjob') }}" class="btn btn-primary">Post a Job</a>
                                 </div>
-
                             </div>
                             <div class="table-responsive">
                                 <table class="table ">
@@ -62,16 +61,14 @@
                                                 <td>
                                                     <a class="icon-link" href="job-detail.html">
                                                         <i class="fa fa-eye" aria-hidden="true"></i></a>
-                                                    <a class="icon-link" href="{{route('account.editjob',$job->id)}}">
+                                                    <a class="icon-link" href="{{ route('account.editjob', $job->id) }}">
                                                         <i class="fa fa-edit" aria-hidden="true"></i></a>
-                                                    <a class="icon-link" href="#">
+                                                    <a class="icon-link" onclick="deletejob({{ $job->id }})">
                                                         <i class="fa fa-trash" aria-hidden="true"></i></a>
                                                 </td>
                                             </tr>
                                         @endforeach
-
                                     </tbody>
-
                                 </table>
                             </div>
                         </div>
@@ -82,4 +79,28 @@
     </section>
 @endsection
 @section('comanJs')
+    <script>
+        //---------->  Delete Button Popup 
+        function deletejob(jobid) {
+            if (confirm('Are you sure want to delete!!')) {
+                $.ajax({
+                    url: "{{ route('account.deletejob') }}",
+                    type: "POST",
+                    data: {
+                        jobid: jobid
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.status == true) {
+                            window.location.href = '{{ route('account.my_job') }}';
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                        alert('An error occurred while processing your request. Please try again later.');
+                    }
+                });
+            }
+        }
+    </script>
 @endsection

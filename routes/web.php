@@ -35,6 +35,7 @@ Route::group(['account'], function () {
     });
 
     Route::group(['middleware' => 'auth'], function () {
+
         // Logout
         Route::get('/account/logout', [AccountController::class, 'logout'])->name('account.logout');
         //Profile
@@ -49,7 +50,12 @@ Route::group(['account'], function () {
         Route::POST('account/savejob', [AccountController::class, 'savejob'])->name('account.savejob');
         //Show My Jobs
         Route::get('account/my_job', [AccountController::class, 'my_job'])->name('account.my_job');
-        //Edit Job page
+        //Edit Job form
         Route::get('account/editjob/{id}', [AccountController::class, 'editjob'])->name('account.editjob');
+        //Update Job form
+        Route::POST('account/UpdateJobPost/{id}', [AccountController::class, 'UpdateJobPost'])->name('account.UpdateJobPost');
+        // Delete Job
+        Route::Post('account/deletejob', [AccountController::class, 'deletejob'])->name('account.deletejob');
+
     });
 });

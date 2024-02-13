@@ -19,7 +19,7 @@
                 </div>
                 <div class="col-lg-9">
                     @include('front.account.message')
-                    <form action="" method="POST" id="createJobPost" name="createJobPost">
+                    <form action="" method="POST" id="UpdateJobPost" name="UpdateJobPost">
                         <div class="card border-0 shadow mb-4 ">
                             <div class="card-body card-form p-4">
                                 <h3 class="fs-4 mb-1">Job Detail Upadte</h3>
@@ -165,18 +165,20 @@
 @endsection
 @section('comanJs')
     <script>
-        $('#createJobPost').submit(function(e) {
+        $('#UpdateJobPost').submit(function(e) {
             e.preventDefault();
             $('.text-danger').empty();
+            $("button[type='submit']").prop('disabled',true);
             $.ajax({
-                url: '{{ route('account.savejob') }}',
+                url: '{{ route("account.UpdateJobPost",$job->id) }}',
                 type: 'POST',
-                data: $('#createJobPost').serialize(),
+                data: $('#UpdateJobPost').serialize(),
                 dataType: 'json',
                 success: function(data) {
+                    $("button[type='submit']").prop('disabled',false);
 
                     if (data.status == true) {
-                        window.location.href = '{{ route("account.createjob") }}'
+                        window.location.href = '{{ route("account.my_job") }}'
                     }
 
                     if (data.status == false) {

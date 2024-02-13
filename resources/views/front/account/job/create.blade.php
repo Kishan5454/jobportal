@@ -168,17 +168,17 @@
         $('#createJobPost').submit(function(e) {
             e.preventDefault();
             $('.text-danger').empty();
+            $("button[type='submit']").prop('disabled',true);
             $.ajax({
                 url: '{{ route('account.savejob') }}',
                 type: 'POST',
                 data: $('#createJobPost').serialize(),
                 dataType: 'json',
                 success: function(data) {
-
+                    $("button[type='submit']").prop('disabled',false);
                     if (data.status == true) {
                         window.location.href = '{{ route("account.createjob") }}'
                     }
-
                     if (data.status == false) {
                         if (data.status == false) {
                             var error = data.error;
