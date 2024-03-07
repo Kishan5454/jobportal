@@ -9,4 +9,6 @@ class JobType extends Model
 {
     use HasFactory;
     protected $table = 'jobtype';
+    protected $primarykey = 'jobtype_id';
+
 }

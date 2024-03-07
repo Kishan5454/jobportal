@@ -9,13 +9,15 @@ class Job extends Model
 {
     use HasFactory;
     protected $table = 'job';
+    protected $primarykey = 'id';
 
     public function JobType()
     {
         return $this->belongsTo(JobType::class);
     }
 
-    public function category(){  
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 }
